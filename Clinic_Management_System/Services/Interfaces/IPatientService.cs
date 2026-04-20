@@ -10,5 +10,7 @@ namespace Clinic_Management_System.Services.Interfaces
         public Task<PatientResponse> GetPatientByClinicIdAndPatientIdAsync(string ClinicId, string PatientId);
 
         public Task<AddPatientDTO> AddPatientAsync(AddPatientDTO Obj);
+
+        public Task<UpdatePatientDTO> UpdatePatientDetailsByPatientId(UpdatePatientDTO Obj);
     }
 }

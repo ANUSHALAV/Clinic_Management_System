@@ -75,13 +75,13 @@ namespace Clinic_Management_System.Controllers
 
         [HttpPost]
         [Route("AddPatient")]
-        public async Task<IActionResult> AddPatientAsync([FromBody]AddPatientDTO Obj)
+        public async Task<IActionResult> AddPatientAsync([FromBody] AddPatientDTO Obj)
         {
             var res = new APIResponse();
             try
             {
                 var result = await _patientService.AddPatientAsync(Obj);
-                if (result!=null)
+                if (result != null)
                 {
                     res.Data = result;
                     res.Success = true;
@@ -91,6 +91,36 @@ namespace Clinic_Management_System.Controllers
                 {
                     res.Success = false;
                     res.Message = "Failed to add patient.";
+                }
+            }
+            catch (Exception ex)
+            {
+                res.Success = false;
+                res.Message = ex.Message;
+                return BadRequest(res);
+            }
+            return Ok(res);
+        }
+
+        [HttpPut]
+        [Route("UpdatePatientById")]
+        public async Task<IActionResult> UpdatePatientDetailsByPatientId([FromBody] UpdatePatientDTO Obj)
+        {
+            var res = new APIResponse();
+            try
+            {
+                var Data = await _patientService.UpdatePatientDetailsByPatientId(Obj);
+                if (Data != null)
+                {
+                    res.Data = Data;
+                    res.Success = true;
+                    res.Message = "Patient Details Retrived Successfully";
+                }
+                else
+                {
+                    res.Success = false;
+                    res.Message = "Patient Details Retrived Not Successfully";
+                    return NotFound(res);
                 }
             }
             catch (Exception ex)

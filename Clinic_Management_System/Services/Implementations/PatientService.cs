@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using Clinic_Management_System.Models.Entities.Users;
 using Clinic_Management_System.Common;
 using Microsoft.AspNetCore.Identity;
+using Clinic_Management_System.Models.Entities.Patients;
 
 namespace Clinic_Management_System.Services.Implementations
 {
@@ -26,7 +27,7 @@ namespace Clinic_Management_System.Services.Implementations
         {
             IMongoCollection<User> patientCollection = _database.GetCollection<User>("User");
             var passwordHasher = new PasswordHasher<User>();
-            var hashPassword = passwordHasher.HashPassword(null, Obj.Password); 
+            var hashPassword = passwordHasher.HashPassword(null, Obj.Password);
             var newPatient = new User
             {
                 ClinicId = Obj.ClinicId,
@@ -42,6 +43,38 @@ namespace Clinic_Management_System.Services.Implementations
             return Obj;
         }
 
+        public async Task<UpdatePatientDTO> UpdatePatientDetailsByPatientId(UpdatePatientDTO Obj)
+        {
+            IMongoCollection<User> PatientCollection = _database.GetCollection<User>("User");
+
+            var filter = Builders<User>.Filter.Where(p => p.UserId == Obj.UserId && p.Status == 1 && p.UserTypeId == CommonVariables.Patient);
+
+            if (filter != null)
+            {
+                var updatePatient = Builders<User>.Update
+                          .Set(u => u.FirstName, Obj.FirstName)
+                          .Set(u => u.LastName, Obj.LastName)
+                          .Set(u => u.Address, Obj.Address)
+                          .Set(u => u.Email, Obj.Email)
+                          .Set(u => u.PhoneNumber, Obj.PhoneNumber)
+                          .Set(u => u.Gender, Obj.Gender)
+                          .Set(u => u.CountryId, Obj.CountryId)
+                          .Set(u => u.StateId, Obj.StateId);
+
+                var result = await PatientCollection.UpdateOneAsync(filter, updatePatient);
+                if (result.ModifiedCount > 0)
+                {
+                    return Obj;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+            return Obj;
+        }
+
         public async Task<PatientResponse> GetPatientAsync(string ClinicId)
         {
             IMongoCollection<User> patientCollection = _database.GetCollection<User>("User");
@@ -50,10 +83,10 @@ namespace Clinic_Management_System.Services.Implementations
             var patients = await patientCollection.Find(filter).FirstOrDefaultAsync();
             var result = new PatientResponse
             {
-               FullName = patients.FirstName + " " + patients.LastName,
-               PatientId = patients.UserId,
-               ClinicId = patients.ClinicId,
-               PatientName = patients.FirstName,
+                FullName = patients.FirstName + " " + patients.LastName,
+                PatientId = patients.UserId,
+                ClinicId = patients.ClinicId,
+                PatientName = patients.FirstName,
             };
 
             return result;
@@ -61,11 +94,11 @@ namespace Clinic_Management_System.Services.Implementations
 
         public async Task<PatientResponse> GetPatientByClinicIdAndPatientIdAsync(string ClinicId, string PatientId)
         {
-            IMongoCollection<User> patientCollection = _database.GetCollection<User>("User");   
+            IMongoCollection<User> patientCollection = _database.GetCollection<User>("User");
 
-            var filter =  Builders<User>.Filter.Where(p=>p.Status==1&& p.UserTypeId==CommonVariables.Patient&& p.ClinicId == ClinicId && p.UserId == PatientId);
+            var filter = Builders<User>.Filter.Where(p => p.Status == 1 && p.UserTypeId == CommonVariables.Patient && p.ClinicId == ClinicId && p.UserId == PatientId);
 
-            var patient= await patientCollection.Find(filter).FirstOrDefaultAsync();
+            var patient = await patientCollection.Find(filter).FirstOrDefaultAsync();
 
             var result = new PatientResponse
             {
@@ -73,7 +106,7 @@ namespace Clinic_Management_System.Services.Implementations
                 PatientId = patient.UserId,
                 ClinicId = patient.ClinicId,
                 PatientName = patient.FirstName,
-            };  
+            };
 
             return result;
         }

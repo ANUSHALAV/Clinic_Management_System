@@ -21,6 +21,7 @@ builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<DBSettings>>(
 builder.Services.AddScoped<IMasterService, MasterService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IDoctorService, DoctorService>();
 
 var app = builder.Build();
 

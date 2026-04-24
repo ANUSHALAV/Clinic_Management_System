@@ -5,8 +5,8 @@ namespace Clinic_Management_System.Services.Interfaces
 {
     public interface IDoctorService
     {
-        public Task<List<DoctorResponse>> GetDoctorsByClinicId(string ClinicId);
-        public Task<DoctorResponse> GetDoctorsByDoctorIdAndClinicId(string UserId, string ClinicId);
-        public Task<AddDoctorDTO> AddDoctorsByClinicId(AddDoctorDTO Obj);
+        public Task<List<DoctorResponse>> GetDoctorsByClinicIdAsync(string ClinicId);
+        public Task<List<DoctorResponse>> GetDoctorsByDoctorIdAndClinicIdAsync(string UserId, string ClinicId);
+        //public Task<AddDoctorDTO> AddDoctorsByClinicIdAsync(AddDoctorDTO Obj);
     }
 }

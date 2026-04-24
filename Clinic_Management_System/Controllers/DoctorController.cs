@@ -16,12 +16,12 @@ namespace Clinic_Management_System.Controllers
 
         [HttpGet]
         [Route("DoctorsByClinic")]
-        public async Task<IActionResult> GetDoctrorsByClinicId(string ClinicId)
+        public async Task<IActionResult> GetDoctrorsByClinicIdAsync(string ClinicId)
         {
             var res = new APIResponse();
             try
             {
-                var Data = await _doctorService.GetDoctorsByClinicId(ClinicId);
+                var Data = await _doctorService.GetDoctorsByClinicIdAsync(ClinicId);
                 if (Data != null)
                 {
                     res.Data = Data;
@@ -47,12 +47,12 @@ namespace Clinic_Management_System.Controllers
 
         [HttpGet]
         [Route("DoctorByDoctorIdAndClinicId")]
-        public async Task<IActionResult> GetDoctrorsByDoctorIdAndClinicId(string UserId, string ClinicId)
+        public async Task<IActionResult> GetDoctrorsByDoctorIdAndClinicIdAsync(string UserId, string ClinicId)
         {
             var res = new APIResponse();
             try
             {
-                var Data = await _doctorService.GetDoctorsByDoctorIdAndClinicId(UserId, ClinicId);
+                var Data = await _doctorService.GetDoctorsByDoctorIdAndClinicIdAsync(UserId, ClinicId);
                 if (Data != null)
                 {
                     res.Data = Data;

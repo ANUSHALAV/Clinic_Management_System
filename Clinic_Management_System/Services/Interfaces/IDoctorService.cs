@@ -7,6 +7,7 @@ namespace Clinic_Management_System.Services.Interfaces
     {
         public Task<List<DoctorResponse>> GetDoctorsByClinicIdAsync(string ClinicId);
         public Task<List<DoctorResponse>> GetDoctorsByDoctorIdAndClinicIdAsync(string UserId, string ClinicId);
-        //public Task<AddDoctorDTO> AddDoctorsByClinicIdAsync(AddDoctorDTO Obj);
+        public Task<AddDoctorDTO> AddDoctorAsync(AddDoctorDTO Obj);
+        public Task<UpdateDoctorDTO> UpdateDoctorAsync(UpdateDoctorDTO Obj);
     }
 }

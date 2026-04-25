@@ -23,64 +23,6 @@ namespace Clinic_Management_System.Services.Implementations
             _database = _mongoClient.GetDatabase(_dbSetting.DatabaseName);
         }
 
-        public async Task<List<UserResponse>> GetUsersAsync()
-        {
-            var clinicCollection = _database.GetCollection<ClinicMaster>("ClinicMaster");
-            var userTypeCollection = _database.GetCollection<UserTypeMaster>("UserTypeMaster");
-            var userCollection = _database.GetCollection<User>("User");
-            var countryCollection = _database.GetCollection<CountryMaster>("CountryMaster");
-            var stateCollection = _database.GetCollection<StateMaster>("StateMaster");
-            var districtCollection = _database.GetCollection<DistrictMaster>("DistrictMaster");
-
-            var clinics = await clinicCollection.Find(c => c.Status == 1).ToListAsync();
-            var userTypes = await userTypeCollection.Find(ut => ut.Status == 1).ToListAsync();
-            var users = await userCollection.Find(u => u.Status == 1).ToListAsync();
-            var country = await countryCollection.Find(w => w.Status == 1).ToListAsync();
-            var state = await stateCollection.Find(w => w.Status == 1).ToListAsync();
-            var district = await districtCollection.Find(w => w.Status == 1).ToListAsync();
-
-            var query = (from u in users
-
-                         join cli in clinics on u.ClinicId equals cli.ClinicMasterId into uclinic
-                         from cli in uclinic.DefaultIfEmpty()
-
-                         join ut in userTypes on u.UserTypeId equals ut.UserTypeId into usertypes
-                         from ut in usertypes.DefaultIfEmpty()
-
-                         join c in country on u.CountryId equals c.CountryId into uc
-                         from c in uc.DefaultIfEmpty()
-
-                         join s in state on u.StateId equals s.StateId into us
-                         from s in us.DefaultIfEmpty()
-
-                         join d in district on u.DistrictId equals d.DistrictId into ud
-                         from d in ud.DefaultIfEmpty()
-
-                         select new UserResponse
-                         {
-                             ClinicId = cli?.ClinicMasterId ?? "",
-                             ClinicName = cli?.ClinicName ?? "",
-                             UserTypeId = ut.UserTypeId,
-                             UserType = ut.UserType,
-                             UserId = u.UserId,
-                             FirstName = u.FirstName,
-                             LastName = u.LastName,
-                             DateOfBirth = u.DateOfBirth,
-                             Email = u.Email,
-                             Address = u.Address,
-                             PhoneNumber = u.PhoneNumber,
-                             Gender = u.Gender,
-                             CountryId = u.CountryId,
-                             StateId = u.StateId,
-                             DistrictId = u.DistrictId,
-                             CountryName = c.CountryName,
-                             StateName = s.StateName,
-                             DistrictName = d.DistrictName,
-                             Status = u.Status
-                         }).ToList();
-            return query;
-        }
-
         public async Task<List<UserResponse>> GetUsersByClinicIdAsync(string ClinicId)
         {
             var clinicCollection = _database.GetCollection<ClinicMaster>("ClinicMaster");
@@ -138,71 +80,6 @@ namespace Clinic_Management_System.Services.Implementations
                          }).ToList();
 
             return query;
-        }
-
-        public async Task<List<UserResponse>> GetUserByIdAsync(string UserId)
-        {
-            var clinicCollection = _database.GetCollection<ClinicMaster>("ClinicMaster");
-            var userTypeCollection = _database.GetCollection<UserTypeMaster>("UserTypeMaster");
-            var userCollection = _database.GetCollection<User>("User");
-            var countryCollection = _database.GetCollection<CountryMaster>("CountryMaster");
-            var stateCollection = _database.GetCollection<StateMaster>("StateMaster");
-            var districtCollection = _database.GetCollection<DistrictMaster>("DistrictMaster");
-
-            if (UserId != null)
-            {
-                var clinics = await clinicCollection.Find(c => c.Status == 1).ToListAsync();
-                var userTypes = await userTypeCollection.Find(ut => ut.Status == 1).ToListAsync();
-                var users = await userCollection.Find(u => u.Status == 1).ToListAsync();
-                var country = await countryCollection.Find(w => w.Status == 1).ToListAsync();
-                var state = await stateCollection.Find(w => w.Status == 1).ToListAsync();
-                var district = await districtCollection.Find(w => w.Status == 1).ToListAsync();
-
-                var query = (from u in users
-
-                             join cli in clinics on u.ClinicId equals cli.ClinicMasterId into uclinic
-                             from cli in uclinic.DefaultIfEmpty()
-
-                             join ut in userTypes on u.UserTypeId equals ut.UserTypeId into usertypes
-                             from ut in usertypes.DefaultIfEmpty()
-
-                             join c in country on u.CountryId equals c.CountryId into uc
-                             from c in uc.DefaultIfEmpty()
-
-                             join s in state on u.StateId equals s.StateId into us
-                             from s in us.DefaultIfEmpty()
-
-                             join d in district on u.DistrictId equals d.DistrictId into ud
-                             from d in ud.DefaultIfEmpty()
-
-                             select new UserResponse
-                             {
-                                 ClinicId = cli?.ClinicMasterId ?? "",
-                                 ClinicName = cli?.ClinicName ?? "",
-                                 UserTypeId = ut.UserTypeId,
-                                 UserType = ut.UserType,
-                                 UserId = u.UserId,
-                                 FirstName = u.FirstName,
-                                 LastName = u.LastName,
-                                 DateOfBirth = u.DateOfBirth,
-                                 Email = u.Email,
-                                 Address = u.Address,
-                                 PhoneNumber = u.PhoneNumber,
-                                 Gender = u.Gender,
-                                 CountryId = u.CountryId,
-                                 StateId = u.StateId,
-                                 DistrictId = u.DistrictId,
-                                 CountryName = c.CountryName,
-                                 StateName = s.StateName,
-                                 DistrictName = d.DistrictName,
-                                 Status = u.Status
-                             }).ToList();
-                return query;
-            }
-            else
-            {
-                return new List<UserResponse>();
-            }
         }
 
         public async Task<List<UserResponse>> GetUserByIdAndClinicIdAsync(string ClinicId, string UserId)

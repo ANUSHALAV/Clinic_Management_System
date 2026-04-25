@@ -16,37 +16,6 @@ namespace Clinic_Management_System.Controllers.Users
         }
 
         [HttpGet]
-        [Route("Users")]
-        public async Task<IActionResult> GetUsersAsync()
-        {
-            var res = new APIResponse();
-            try
-            {
-                var users = await _userService.GetUsersAsync();
-                if (users != null)
-                {
-                    res.Success = true;
-                    res.Data = users;
-                    res.Message = "User data retrieved successfully.";
-                }
-                else
-                {
-                    res.Success = false;
-                    res.Message = "No users found.";
-                    return NotFound(res);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                res.Success = false;
-                res.Message = $"An error occurred white retrieving user data:{ex.Message}";
-                return BadRequest(res);
-            }
-            return Ok(res);
-        }
-
-        [HttpGet]
         [Route("UsersByClinic")]
         public async Task<IActionResult> GetUsersByClinicIdAsync(string ClinicId)
         {
@@ -73,37 +42,6 @@ namespace Clinic_Management_System.Controllers.Users
                 res.Success = false;
                 res.Message = $"An error occurred white retrieving user data:{ex.Message}";
                 return BadRequest(res);
-            }
-            return Ok(res);
-        }
-
-        [HttpGet]
-        [Route("UserById")]
-        public async Task<IActionResult> GetUserByIdAsync(string UserId)
-        {
-            var res = new APIResponse();
-            try
-            {
-                var user = await _userService.GetUserByIdAsync(UserId);
-                if (user != null)
-                {
-                    res.Success = true;
-                    res.Data = user;
-                    res.TotalRecorde = user.Count;
-                    res.Message = "User data retrieved successfully.";
-                }
-                else
-                {
-                    res.Success = false;
-                    res.Message = "User not found.";
-                    return NotFound(res);
-                }
-            }
-            catch (Exception ex)
-            {
-                res.Success = false;
-                res.Message = $"An error occurred white retrieving user data:{ex.Message}";
-                return BadRequest(ex.Message);
             }
             return Ok(res);
         }

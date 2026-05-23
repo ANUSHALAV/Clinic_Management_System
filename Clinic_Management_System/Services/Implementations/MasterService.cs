@@ -1,6 +1,7 @@
 ﻿using Clinic_Management_System.Configurations;
 using Clinic_Management_System.Models.DTOs;
 using Clinic_Management_System.Models.Entities.Masters;
+using Clinic_Management_System.Models.Entities.Users;
 using Clinic_Management_System.Models.Masters;
 using Clinic_Management_System.Services.Interfaces;
 using MongoDB.Driver;
@@ -80,6 +81,58 @@ namespace Clinic_Management_System.Services.Implementations
             };
             await clinicCollection.InsertOneAsync(clinicData);
             return ClinicDTOObj;
+        }
+
+        public async Task<List<DepartmentMaster>> GetDepartmentAsync(string ClinicId)
+        {
+            IMongoCollection<DepartmentMaster> DeparmentMasterCollection = _database.GetCollection<DepartmentMaster>("DepartmentMaster");
+            var deparment = await DeparmentMasterCollection.Find(d => d.ClinicId == ClinicId && d.Status == 1).ToListAsync();
+            return deparment;
+        }
+
+        public async Task<AddDepartmentDTO> AddDepartmentAsync(AddDepartmentDTO DepartmentDTOObj)
+        {
+            IMongoCollection<DepartmentMaster> DeparmentMasterCollection = _database.GetCollection<DepartmentMaster>("DepartmentMaster");
+            if (DepartmentDTOObj != null)
+            {
+                var departmentData = new DepartmentMaster
+                {
+                    ClinicId = DepartmentDTOObj.ClinicId,
+                    DepartmentName = DepartmentDTOObj.DepartmentName,
+                    Status = 1
+                };
+
+                await DeparmentMasterCollection.InsertOneAsync(departmentData);
+            }
+            else
+            {
+                return null;
+            }
+            return DepartmentDTOObj;
+        }
+
+        public async Task<UpdateDepartmentDTO> UpdateDepartmentAsync(UpdateDepartmentDTO DepartmentDTOObj)
+        {
+            IMongoCollection<DepartmentMaster> DeparmentMasterCollection = _database.GetCollection<DepartmentMaster>("DepartmentMaster");
+            var filter = Builders<DepartmentMaster>.Filter.Where(d => d.ClinicId == DepartmentDTOObj.ClinicId && d.DepartmentId == DepartmentDTOObj.DepartmentId && d.Status == 1);
+            if (filter != null)
+            {
+                var updateDepeartment = Builders<DepartmentMaster>.Update
+                        .Set(u => u.ClinicId, DepartmentDTOObj.ClinicId)
+                        .Set(u => u.DepartmentName, DepartmentDTOObj.DepartmentName)
+                        .Set(u => u.Status, DepartmentDTOObj.Status);
+
+                var result = await DeparmentMasterCollection.UpdateOneAsync(filter, updateDepeartment);
+                if (result.ModifiedCount > 0)
+                {
+                    return DepartmentDTOObj;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return null;
         }
     }
 }

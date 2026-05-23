@@ -1,5 +1,5 @@
 ﻿using Clinic_Management_System.Models.DTOs;
-using Clinic_Management_System.Models.Masters;
+using Clinic_Management_System.Models.Entities.Masters;
 using Clinic_Management_System.Models.Responses;
 using Clinic_Management_System.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -188,6 +188,98 @@ namespace Clinic_Management_System.Controllers.Masters
             {
                 res.Success = false;
                 res.Message = $"An error occurred white saving Clinic data:{ex.Message}";
+                return BadRequest(res);
+            }
+            return Ok(res);
+        }
+
+        [HttpGet]
+        [Route("Depeartment")]
+        public async Task<IActionResult> GetDepartmentAsync(string ClinicId)
+        {
+            var res = new APIResponse();
+            try
+            {
+                var Data = await _masterService.GetDepartmentAsync(ClinicId);
+                if (Data != null)
+                {
+                    res.Data = Data;
+                    res.Success = true;
+                    res.Message = "Deparment Reterived Successfull.";
+                    res.TotalRecorde = Data.Count;
+                }
+                else
+                {
+                    res.Success = false;
+                    res.Message = "Deparment not Reterived Successfull.";
+                    return NotFound(res);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                res.Success = false;
+                res.Message = ex.Message;
+                return BadRequest(res);
+            }
+            return Ok(res);
+        }
+
+        [HttpPost]
+        [Route("AddDepratment")]
+        public async Task<IActionResult> AddDepartmentAsync(AddDepartmentDTO DepartmentDTOObj)
+        {
+            var res = new APIResponse();
+            try
+            {
+                var Data = await _masterService.AddDepartmentAsync(DepartmentDTOObj);
+                if (Data != null)
+                {
+                    res.Success = true;
+                    res.Message = "Deparment Add Successfully.";
+                    res.Data = Data;
+                }else
+                {
+                    res.Success = false;
+                    res.Message = "Deparment not Add Successfully.";
+                    return NotFound(res);
+                }
+
+            }catch(Exception ex)
+            {
+                res.Success = true;
+                res.Message = ex.Message;
+                return BadRequest(res);
+            }
+            return Ok(res);
+        }
+
+        [HttpPut]
+        [Route("UpdateDepratment")]
+        public async Task<IActionResult> UpdateepartmentAsync(UpdateDepartmentDTO DepartmentDTOObj)
+        {
+            var res = new APIResponse();
+            try
+            {
+                var Data = await _masterService.UpdateDepartmentAsync(DepartmentDTOObj);
+                if (Data != null)
+                {
+                    res.Success = true;
+                    res.Message = "Deparment Update Successfully.";
+                    res.Data = Data;
+                }
+                else
+                {
+                    res.Success = false;
+                    res.Message = "Deparment not Update Successfully.";
+                    return NotFound(res);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                res.Success = true;
+                res.Message = ex.Message;
                 return BadRequest(res);
             }
             return Ok(res);

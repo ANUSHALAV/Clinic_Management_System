@@ -16,5 +16,11 @@ namespace Clinic_Management_System.Services.Interfaces
         public Task<List<ClinicMaster>> GetClinicAsync();
 
         public Task<ClinicDTO> AddClinicAsync(ClinicDTO ClinicDTOObj);
+
+        public Task<List<DepartmentMaster>> GetDepartmentAsync(string ClinicId);
+
+        public Task<AddDepartmentDTO> AddDepartmentAsync(AddDepartmentDTO DeparmentDTOObj);
+
+        public Task<UpdateDepartmentDTO> UpdateDepartmentAsync(UpdateDepartmentDTO DeparmentDTOObj);
     }
 }

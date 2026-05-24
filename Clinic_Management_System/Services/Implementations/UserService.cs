@@ -41,7 +41,7 @@ namespace Clinic_Management_System.Services.Implementations
 
             var query = (from u in users
 
-                         join cli in clinics on u.ClinicId equals cli.ClinicMasterId into uclinic
+                         join cli in clinics on u.ClinicId equals cli.ClinicId into uclinic
                          from cli in uclinic.DefaultIfEmpty()
 
                          join ut in userTypes on u.UserTypeId equals ut.UserTypeId into usertypes
@@ -58,7 +58,7 @@ namespace Clinic_Management_System.Services.Implementations
 
                          select new UserResponse
                          {
-                             ClinicId = cli.ClinicMasterId,
+                             ClinicId = cli.ClinicId,
                              ClinicName = cli.ClinicName,
                              UserTypeId = ut.UserTypeId,
                              UserType = ut.UserType,
@@ -97,7 +97,7 @@ namespace Clinic_Management_System.Services.Implementations
 
                 if (filterUserData != null)
                 {
-                    var clinic = await clinicCollection.Find(c => c.ClinicMasterId == filterUserData.ClinicId && c.Status == 1).FirstOrDefaultAsync();
+                    var clinic = await clinicCollection.Find(c => c.ClinicId == filterUserData.ClinicId && c.Status == 1).FirstOrDefaultAsync();
                     var country = await countryCollection.Find(w => w.CountryId == filterUserData.CountryId && w.Status == 1).FirstOrDefaultAsync();
                     var state = await stateCollection.Find(w => w.StateId == filterUserData.StateId && w.Status == 1).FirstOrDefaultAsync();
                     var district = await districtCollection.Find(w => w.DistrictId == filterUserData.DistrictId && w.Status == 1).FirstOrDefaultAsync();
@@ -110,7 +110,7 @@ namespace Clinic_Management_System.Services.Implementations
                         UserId = filterUserData.UserId,
                         UserTypeId = filterUserData.UserTypeId,
                         UserType = userType.UserType,
-                        ClinicId  = clinic.ClinicMasterId,
+                        ClinicId  = clinic.ClinicId,
                         ClinicName = clinic.ClinicName,
                         FirstName = filterUserData.FirstName,
                         LastName = filterUserData.LastName,

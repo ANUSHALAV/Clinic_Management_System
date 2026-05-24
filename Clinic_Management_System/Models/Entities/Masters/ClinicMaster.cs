@@ -8,7 +8,7 @@ namespace Clinic_Management_System.Models.Entities.Masters
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string ClinicMasterId { get; set; }
+        public string ClinicId { get; set; }
         public string ClinicName { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }

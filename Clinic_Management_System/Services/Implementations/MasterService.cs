@@ -67,7 +67,7 @@ namespace Clinic_Management_System.Services.Implementations
             return clinic;
         }
 
-        public async Task<ClinicDTO> AddClinicAsync(ClinicDTO ClinicDTOObj)
+        public async Task<AddClinicDTO> AddClinicAsync(AddClinicDTO ClinicDTOObj)
         {
             IMongoCollection<ClinicMaster> clinicCollection = _database.GetCollection<ClinicMaster>("ClinicMaster");
 
@@ -81,6 +81,39 @@ namespace Clinic_Management_System.Services.Implementations
             };
             await clinicCollection.InsertOneAsync(clinicData);
             return ClinicDTOObj;
+        }
+
+        public async Task<UpdateClinicDTO> UpdateClinicAsync(UpdateClinicDTO UpdateClinicDTOObj)
+        {
+            IMongoCollection<ClinicMaster> ClinicMasterCollection = _database.GetCollection<ClinicMaster>("ClinicMaster");
+
+            var filter = Builders<ClinicMaster>.Filter.Where(c => c.ClinicId == UpdateClinicDTOObj.ClinicId&&c.Status==1);
+
+            if (filter != null)
+            {
+                var updateClinic = Builders<ClinicMaster>.Update
+                    .Set(c => c.ClinicId, UpdateClinicDTOObj.ClinicId)
+                    .Set(c => c.ClinicName, UpdateClinicDTOObj.ClinicName)
+                    .Set(c => c.Phone, UpdateClinicDTOObj.Phone)
+                    .Set(c => c.Email, UpdateClinicDTOObj.Email)
+                    .Set(c => c.Address, UpdateClinicDTOObj.Address)
+                    .Set(c => c.Status, UpdateClinicDTOObj.Status);
+
+                var result = await ClinicMasterCollection.UpdateOneAsync(filter, updateClinic);
+
+                if (result.ModifiedCount > 0)
+                {
+                    return UpdateClinicDTOObj;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<List<DepartmentMaster>> GetDepartmentAsync(string ClinicId)

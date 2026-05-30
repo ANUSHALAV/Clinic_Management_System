@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using Clinic_Management_System.Models.Entities.Patients;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Clinic_Management_System.Models.DTOs
 {
@@ -20,5 +21,10 @@ namespace Clinic_Management_System.Models.DTOs
         public string CountryId { get; set; }
         public string StateId { get; set; }
         public string DistrictId { get; set; }
+
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+        public DateTime AppointmentDate { get; set; }
+        public string DoctorId { get; set; }
+        public string DepartmentId { get; set; }
     }
 }

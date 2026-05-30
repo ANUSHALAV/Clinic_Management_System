@@ -37,9 +37,33 @@ namespace Clinic_Management_System.Services.Implementations
                 FirstName = Obj.FirstName,
                 LastName = Obj.LastName,
                 DateOfBirth = Obj.DateOfBirth,
+                Gender = Obj.Gender,
+                PhoneNumber = Obj.PhoneNumber,
+                Address = Obj.Address,
+                CountryId = Obj.CountryId,
+                StateId = Obj.StateId,
+                DistrictId = Obj.DistrictId,
                 Status = 1
             };
             await patientCollection.InsertOneAsync(newPatient);
+
+            if (Obj != null)
+            {
+                IMongoCollection<SlotBookingDetails> slotBookingCollection = _database.GetCollection<SlotBookingDetails>("SlotBookingDetails");
+
+                var slotDetails = new SlotBookingDetails
+                {
+                    ClinicId = Obj.ClinicId,
+                    PatientId = newPatient.UserId,
+                    DoctorId = Obj.DoctorId,
+                    DepartmentId = Obj.DepartmentId,
+                    AppointmentDate = Obj.AppointmentDate,
+                    BookingNumber = $"RCH-{DateTime.Now:yyyyMMddHHmmss}",
+                    Status = 1
+                };
+
+                await slotBookingCollection.InsertOneAsync(slotDetails);
+            }
             return Obj;
         }
 

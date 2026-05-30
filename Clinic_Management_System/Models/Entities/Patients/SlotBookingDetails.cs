@@ -11,6 +11,7 @@ namespace Clinic_Management_System.Models.Entities.Patients
         public string SlotBookingId { get; set; }
         public string ClinicId { get; set; }
         public string PatientId { get; set; }
+        public string BookingType { get; set; }
         public string BookingNumber { get; set; }
 
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]

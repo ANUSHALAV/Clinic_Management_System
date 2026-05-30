@@ -50,15 +50,16 @@ namespace Clinic_Management_System.Services.Implementations
             if (Obj != null)
             {
                 IMongoCollection<SlotBookingDetails> slotBookingCollection = _database.GetCollection<SlotBookingDetails>("SlotBookingDetails");
-
+                var bookingPrefix = Obj.BookingType == "IPD" ? "IPD" : Obj.BookingType == "OPD" ? "OPD" : Obj.BookingType == "Emergency" ? "EMR" : "UNK";
                 var slotDetails = new SlotBookingDetails
                 {
                     ClinicId = Obj.ClinicId,
                     PatientId = newPatient.UserId,
                     DoctorId = Obj.DoctorId,
                     DepartmentId = Obj.DepartmentId,
+                    BookingType = Obj.BookingType,
                     AppointmentDate = Obj.AppointmentDate,
-                    BookingNumber = $"RCH-{DateTime.Now:yyyyMMddHHmmss}",
+                    BookingNumber = $"{bookingPrefix}-{DateTime.Now:yyyyMMddHHmmss}",
                     Status = 1
                 };
 

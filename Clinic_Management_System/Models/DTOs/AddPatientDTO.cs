@@ -21,7 +21,7 @@ namespace Clinic_Management_System.Models.DTOs
         public string CountryId { get; set; }
         public string StateId { get; set; }
         public string DistrictId { get; set; }
-
+        public string BookingType { get; set; }
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime AppointmentDate { get; set; }
         public string DoctorId { get; set; }

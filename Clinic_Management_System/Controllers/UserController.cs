@@ -15,14 +15,14 @@ namespace Clinic_Management_System.Controllers.Users
             _userService = userService;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("UsersByClinic")]
-        public async Task<IActionResult> GetUsersByClinicIdAsync(string ClinicId)
+        public async Task<IActionResult> GetUsersByClinicIdAsync(ImportDTO obj)
         {
             var res = new APIResponse();
             try
             {
-                var users = await _userService.GetUsersByClinicIdAsync(ClinicId);
+                var users = await _userService.GetUsersByClinicIdAsync(obj);
                 if (users != null)
                 {
                     res.Success = true;

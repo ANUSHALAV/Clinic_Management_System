@@ -6,7 +6,7 @@ namespace Clinic_Management_System.Services.Interfaces
 {
     public interface IUserService
     {
-        public Task<List<UserResponse>> GetUsersByClinicIdAsync(string Clinicid);
+        public Task<List<UserResponse>> GetUsersByClinicIdAsync(ImportDTO obj);
         public Task<List<UserResponse>> GetUserByIdAndClinicIdAsync(string ClinicId, string UserId);
         public Task<AddUserDTO> AddUserAsync(AddUserDTO UserDTOObj);
         public Task<UpdateUserDTO> UpdateUserByUserIdAsync(UpdateUserDTO UpdateUserDTOObj);

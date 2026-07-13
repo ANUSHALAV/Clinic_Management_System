@@ -23,7 +23,7 @@ namespace Clinic_Management_System.Services.Implementations
             _database = _mongoClient.GetDatabase(_dbSetting.DatabaseName);
         }
 
-        public async Task<List<UserResponse>> GetUsersByClinicIdAsync(string ClinicId)
+        public async Task<List<UserResponse>> GetUsersByClinicIdAsync(ImportDTO obj)
         {
             var clinicCollection = _database.GetCollection<ClinicMaster>("ClinicMaster");
             var userTypeCollection = _database.GetCollection<UserTypeMaster>("UserTypeMaster");
@@ -32,52 +32,73 @@ namespace Clinic_Management_System.Services.Implementations
             var stateCollection = _database.GetCollection<StateMaster>("StateMaster");
             var districtCollection = _database.GetCollection<DistrictMaster>("DistrictMaster");
 
-            var clinics = await clinicCollection.Find(c => c.Status == 1).ToListAsync();
-            var userTypes = await userTypeCollection.Find(ut => ut.Status == 1).ToListAsync();
-            var users = await userCollection.Find(u => u.Status == 1).ToListAsync();
-            var country = await countryCollection.Find(w => w.Status == 1).ToListAsync();
-            var state = await stateCollection.Find(w => w.Status == 1).ToListAsync();
-            var district = await districtCollection.Find(w => w.Status == 1).ToListAsync();
+            var clinicsTask = clinicCollection.Find(c => c.Status == 1).ToListAsync();
+            var userTypesTask = userTypeCollection.Find(ut => ut.Status == 1).ToListAsync();
+            var usersTask = userCollection.Find(u => u.Status == 1 && u.ClinicId == obj.ClinicId).Skip(obj.PageNumber).Limit(obj.DataLimit).ToListAsync();
+            var countriesTask = countryCollection.Find(c => c.Status == 1).ToListAsync();
+            var statesTask = stateCollection.Find(s => s.Status == 1).ToListAsync();
+            var districtsTask = districtCollection.Find(d => d.Status == 1).ToListAsync();
 
-            var query = (from u in users
+            await Task.WhenAll(
+                clinicsTask,
+                userTypesTask,
+                usersTask,
+                countriesTask,
+                statesTask,
+                districtsTask);
 
-                         join cli in clinics on u.ClinicId equals cli.ClinicId into uclinic
-                         from cli in uclinic.DefaultIfEmpty()
+            var clinics = await clinicsTask;
+            var userTypes = await userTypesTask;
+            var users = await usersTask;
+            var countries = await countriesTask;
+            var states = await statesTask;
+            var districts = await districtsTask;
 
-                         join ut in userTypes on u.UserTypeId equals ut.UserTypeId into usertypes
-                         from ut in usertypes.DefaultIfEmpty()
+            var query =
+                (from u in users
 
-                         join c in country on u.CountryId equals c.CountryId into uc
-                         from c in uc.DefaultIfEmpty()
+                 join cli in clinics on u.ClinicId equals cli.ClinicId into clinicJoin
+                 from cli in clinicJoin.DefaultIfEmpty()
 
-                         join s in state on u.StateId equals s.StateId into us
-                         from s in us.DefaultIfEmpty()
+                 join ut in userTypes on u.UserTypeId equals ut.UserTypeId into userTypeJoin
+                 from ut in userTypeJoin.DefaultIfEmpty()
 
-                         join d in district on u.DistrictId equals d.DistrictId into ud
-                         from d in ud.DefaultIfEmpty()
+                 join c in countries on u.CountryId equals c.CountryId into countryJoin
+                 from c in countryJoin.DefaultIfEmpty()
 
-                         select new UserResponse
-                         {
-                             ClinicId = cli.ClinicId,
-                             ClinicName = cli.ClinicName,
-                             UserTypeId = ut.UserTypeId,
-                             UserType = ut.UserType,
-                             UserId = u.UserId,
-                             FirstName = u.FirstName,
-                             LastName = u.LastName,
-                             DateOfBirth = u.DateOfBirth,
-                             Email = u.Email,
-                             Address = u.Address,
-                             PhoneNumber = u.PhoneNumber,
-                             Gender = u.Gender,
-                             CountryId = u.CountryId,
-                             StateId = u.StateId,
-                             DistrictId = u.DistrictId,
-                             CountryName = c.CountryName,
-                             StateName = s.StateName,
-                             DistrictName = d.DistrictName,
-                             Status = u.Status
-                         }).ToList();
+                 join s in states on u.StateId equals s.StateId into stateJoin
+                 from s in stateJoin.DefaultIfEmpty()
+
+                 join d in districts on u.DistrictId equals d.DistrictId into districtJoin
+                 from d in districtJoin.DefaultIfEmpty()
+
+                 select new UserResponse
+                 {
+                     ClinicId = cli?.ClinicId,
+                     ClinicName = cli?.ClinicName,
+
+                     UserTypeId = ut?.UserTypeId,
+                     UserType = ut?.UserType,
+
+                     UserId = u.UserId,
+                     FirstName = u.FirstName,
+                     LastName = u.LastName,
+                     DateOfBirth = u.DateOfBirth,
+                     Email = u.Email,
+                     Address = u.Address,
+                     PhoneNumber = u.PhoneNumber,
+                     Gender = u.Gender,
+
+                     CountryId = u.CountryId,
+                     StateId = u.StateId,
+                     DistrictId = u.DistrictId,
+
+                     CountryName = c?.CountryName,
+                     StateName = s?.StateName,
+                     DistrictName = d?.DistrictName,
+
+                     Status = u.Status
+                 }).ToList();
 
             return query;
         }

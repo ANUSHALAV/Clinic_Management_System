@@ -225,12 +225,12 @@ namespace Clinic_Management_System.Controllers.Masters
 
         [HttpGet]
         [Route("Depeartment")]
-        public async Task<IActionResult> GetDepartmentAsync(string ClinicId)
+        public async Task<IActionResult> GetDepartmentAsync()
         {
             var res = new APIResponse();
             try
             {
-                var Data = await _masterService.GetDepartmentAsync(ClinicId);
+                var Data = await _masterService.GetDepartmentAsync();
                 if (Data != null)
                 {
                     res.Data = Data;

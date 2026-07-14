@@ -17,7 +17,7 @@ namespace Clinic_Management_System.Controllers.Users
 
         [HttpPost]
         [Route("UsersByClinic")]
-        public async Task<IActionResult> GetUsersByClinicIdAsync(ImportDTO obj)
+        public async Task<IActionResult> GetUsersByClinicIdAsync([FromBody] ImportDTO obj)
         {
             var res = new APIResponse();
             try

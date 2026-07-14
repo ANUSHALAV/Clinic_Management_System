@@ -116,10 +116,10 @@ namespace Clinic_Management_System.Services.Implementations
             }
         }
 
-        public async Task<List<DepartmentMaster>> GetDepartmentAsync(string ClinicId)
+        public async Task<List<DepartmentMaster>> GetDepartmentAsync()
         {
             IMongoCollection<DepartmentMaster> DeparmentMasterCollection = _database.GetCollection<DepartmentMaster>("DepartmentMaster");
-            var deparment = await DeparmentMasterCollection.Find(d => d.ClinicId == ClinicId && d.Status == 1).ToListAsync();
+            var deparment = await DeparmentMasterCollection.Find(d => d.Status == 1).ToListAsync();
             return deparment;
         }
 

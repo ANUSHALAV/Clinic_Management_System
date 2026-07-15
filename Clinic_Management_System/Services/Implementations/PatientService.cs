@@ -100,19 +100,28 @@ namespace Clinic_Management_System.Services.Implementations
             return Obj;
         }
 
-        public async Task<PatientResponse> GetPatientAsync(string ClinicId)
+        public async Task<List<PatientResponse>> GetPatientAsync(ImportDTO obj)
         {
             IMongoCollection<User> patientCollection = _database.GetCollection<User>("User");
 
-            var filter = Builders<User>.Filter.Where(p => p.Status == 1 && p.UserTypeId == CommonVariables.Patient && p.ClinicId == ClinicId);
-            var patients = await patientCollection.Find(filter).FirstOrDefaultAsync();
-            var result = new PatientResponse
+            var filter = Builders<User>.Filter.Where(p =>
+                p.Status == 1 &&
+                p.UserTypeId == CommonVariables.Patient &&
+                p.ClinicId == obj.ClinicId);
+
+            var patients = await patientCollection
+                .Find(filter)
+                .Skip((obj.PageNumber - 1) * obj.DataLimit)
+                .Limit(obj.DataLimit)
+                .ToListAsync();
+
+            var result = patients.Select(p => new PatientResponse
             {
-                FullName = patients.FirstName + " " + patients.LastName,
-                PatientId = patients.UserId,
-                ClinicId = patients.ClinicId,
-                PatientName = patients.FirstName,
-            };
+                FullName = $"{p.FirstName} {p.LastName}",
+                PatientId = p.UserId,
+                ClinicId = p.ClinicId,
+                PatientName = p.FirstName
+            }).ToList();
 
             return result;
         }

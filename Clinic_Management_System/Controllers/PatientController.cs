@@ -17,12 +17,12 @@ namespace Clinic_Management_System.Controllers
 
         [HttpGet]
         [Route("Patients")]
-        public async Task<IActionResult> GetPatientAsync(string ClinicId)
+        public async Task<IActionResult> GetPatientAsync([FromBody] ImportDTO obj)
         {
             var res = new APIResponse();
             try
             {
-                var Patients = await _patientService.GetPatientAsync(ClinicId);
+                var Patients = await _patientService.GetPatientAsync(obj);
                 if (Patients != null)
                 {
                     res.Success = true;

@@ -5,7 +5,7 @@ namespace Clinic_Management_System.Services.Interfaces
 {
     public interface IPatientService
     {
-        public Task<PatientResponse> GetPatientAsync(string ClinicId);
+        public Task<PatientResponse> GetPatientAsync(ImportDTO obj);
 
         public Task<PatientResponse> GetPatientByClinicIdAndPatientIdAsync(string ClinicId, string PatientId);
 

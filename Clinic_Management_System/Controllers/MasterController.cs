@@ -2,6 +2,7 @@
 using Clinic_Management_System.Models.Entities.Masters;
 using Clinic_Management_System.Models.Responses;
 using Clinic_Management_System.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic_Management_System.Controllers.Masters
@@ -15,7 +16,7 @@ namespace Clinic_Management_System.Controllers.Masters
             this._masterService = masterService;
         }
 
-        [HttpGet]
+        [HttpGet,Authorize]
         [Route("UserType")]
         public async Task<IActionResult> GetUserTypeAsync()
         {

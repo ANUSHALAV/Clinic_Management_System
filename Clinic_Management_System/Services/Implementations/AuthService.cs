@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Clinic_Management_System.Services.Implementations
 {
@@ -15,9 +18,12 @@ namespace Clinic_Management_System.Services.Implementations
         public readonly IMongoDatabase _database;
         public readonly DBSettings _dbSetting;
         public readonly MongoClient _mongoClient;
+        public readonly JWTSettings _jWTSetting;
 
-        public AuthService(DBSettings dbSetting) { 
+        public AuthService(DBSettings dbSetting, JWTSettings jwtSetting)
+        {
             _dbSetting = dbSetting;
+            _jWTSetting = jwtSetting;
             _mongoClient = new MongoClient(_dbSetting.ConnectionString);
             _database = _mongoClient.GetDatabase(_dbSetting.DatabaseName);
         }
@@ -38,6 +44,20 @@ namespace Clinic_Management_System.Services.Implementations
 
                     if (isPasswordValid == PasswordVerificationResult.Success)
                     {
+                        var token = GenerateToken(userData);
+                        //response = new UserResponse
+                        //{
+                        //    UserId = userData.UserId,
+                        //    UserTypeId = userData.UserTypeId,
+                        //    ClinicId = userData.ClinicId,
+                        //    FirstName = userData.FirstName,
+                        //    LastName = userData.LastName,
+                        //    DateOfBirth = userData.DateOfBirth,
+                        //    Email = userData.Email,
+                        //    Address = userData.Address,
+                        //    Gender = userData.Gender,
+                        //    PhoneNumber = userData.PhoneNumber,
+                        //};
                         response = new UserResponse
                         {
                             UserId = userData.UserId,
@@ -50,6 +70,8 @@ namespace Clinic_Management_System.Services.Implementations
                             Address = userData.Address,
                             Gender = userData.Gender,
                             PhoneNumber = userData.PhoneNumber,
+                            Token = token,
+                            Status = userData.Status
                         };
 
                         return response;
@@ -62,6 +84,34 @@ namespace Clinic_Management_System.Services.Implementations
                 return null;
             }
             return null;
+        }
+
+
+        public string GenerateToken(User user)
+        {
+            var claims = new[]
+            {
+            new Claim(ClaimTypes.NameIdentifier, user.UserId),
+            new Claim(ClaimTypes.Name, user.FirstName),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Role, user.UserTypeId)
+        };
+
+            var key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_jWTSetting.SecretKey));
+
+            var creds = new SigningCredentials(
+                key,
+                SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _jWTSetting.Issuer,
+                audience: _jWTSetting.Audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(_jWTSetting.ExpiryMinutes),
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

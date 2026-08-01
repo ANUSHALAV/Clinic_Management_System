@@ -23,7 +23,8 @@ namespace Clinic_Management_System.Models.Responses
         public string CountryName { get; set; }
         public string StateName { get; set; }
         public string DistrictName { get; set; }
-        public string Address { get; set; }
+        public string Address { get; set; } 
+        public string Token { get; set; }
         public int Status { get; set; }
 
     }

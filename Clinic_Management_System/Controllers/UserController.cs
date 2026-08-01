@@ -127,36 +127,5 @@ namespace Clinic_Management_System.Controllers.Users
             }
             return Ok(res);
         }
-
-        [HttpPost]
-        [Route("Login")]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginDTO Obj)
-        {
-            var res = new APIResponse();
-            try
-            {
-                var Data = await _userService.LoginAsync(Obj);
-                if (Data != null)
-                {
-                    res.Data = Data;
-                    res.Success = true;
-                    res.Message = "Login Successfully.";
-                }
-                else
-                {
-                    res.Success = false;
-                    res.Message = "Login not Successfully.";
-                    return NotFound(res);
-                }
-            }
-            catch(Exception ex)
-            {
-                res.Success = false;
-                res.Message = ex.Message;
-                return BadRequest(res);
-            }
-            return Ok(res);
-        }
-
     }
 }

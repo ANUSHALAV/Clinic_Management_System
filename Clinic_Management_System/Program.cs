@@ -20,6 +20,7 @@ builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<DBSettings>>(
 // Service Register
 builder.Services.AddScoped<IMasterService, MasterService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 

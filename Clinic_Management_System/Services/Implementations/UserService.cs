@@ -215,47 +215,5 @@ namespace Clinic_Management_System.Services.Implementations
             }
             return null;
         }
-
-        public async Task<UserResponse> LoginAsync([FromBody] LoginDTO Obj)
-        {
-            if (Obj != null)
-            {
-                IMongoCollection<User> UserCollection = _database.GetCollection<User>("User");
-
-                var filterUser = Builders<User>.Filter.Where(u=>u.LoginId==Obj.LoginId && u.Status == 1);
-                var userData = await UserCollection.Find(filterUser).FirstOrDefaultAsync();
-                UserResponse response;
-                if (userData != null)
-                {
-                    var passwordHasher = new PasswordHasher<User>();
-                    var isPasswordValid = passwordHasher.VerifyHashedPassword(null, userData.Password, Obj.Password);
-
-                    if (isPasswordValid == PasswordVerificationResult.Success)
-                    {
-                        response =  new UserResponse
-                        {
-                            UserId = userData.UserId,
-                            UserTypeId = userData.UserTypeId,
-                            ClinicId = userData.ClinicId,
-                            FirstName = userData.FirstName,
-                            LastName = userData.LastName,
-                            DateOfBirth = userData.DateOfBirth,
-                            Email = userData.Email,
-                            Address = userData.Address,
-                            Gender = userData.Gender,
-                            PhoneNumber = userData.PhoneNumber,
-                        };
-
-                        return response;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-                return null;
-            }
-            return null;
-        }
     }
 }

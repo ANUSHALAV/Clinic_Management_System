@@ -2,6 +2,7 @@
 using Clinic_Management_System.Models.Entities.Users;
 using Clinic_Management_System.Models.Responses;
 using Clinic_Management_System.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic_Management_System.Controllers.Users
@@ -15,7 +16,7 @@ namespace Clinic_Management_System.Controllers.Users
             _userService = userService;
         }
 
-        [HttpPost]
+        [HttpPost,Authorize]
         [Route("UsersByClinic")]
         public async Task<IActionResult> GetUsersByClinicIdAsync([FromBody] ImportDTO obj)
         {
@@ -46,7 +47,7 @@ namespace Clinic_Management_System.Controllers.Users
             return Ok(res);
         }
 
-        [HttpGet]
+        [HttpGet,Authorize]
         [Route("UserByIdAndByClinic")]
         public async Task<IActionResult> GetUserByIdAndClinicIdAsync(string ClinicId, string UserId)
         {
@@ -77,7 +78,7 @@ namespace Clinic_Management_System.Controllers.Users
             return Ok(res);
         }
 
-        [HttpPost]
+        [HttpPost,Authorize]
         [Route("AddUser")]
         public async Task<IActionResult> AddUserAsync([FromBody] AddUserDTO Obj)
         {
@@ -97,7 +98,7 @@ namespace Clinic_Management_System.Controllers.Users
             return Ok(res);
         }
 
-        [HttpPut]
+        [HttpPut,Authorize]
         [Route("UpdateUser")]
         public async Task<IActionResult> UpdateUserByUserIdAsync([FromBody] UpdateUserDTO Obj)
         {

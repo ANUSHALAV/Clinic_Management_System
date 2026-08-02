@@ -2,6 +2,7 @@
 using Clinic_Management_System.Models.Responses;
 using Clinic_Management_System.Services.Implementations;
 using Clinic_Management_System.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic_Management_System.Controllers
@@ -15,7 +16,7 @@ namespace Clinic_Management_System.Controllers
             _doctorService = doctorService;
         }
 
-        [HttpGet]
+        [HttpGet,Authorize]
         [Route("DoctorsByClinic")]
         public async Task<IActionResult> GetDoctrorsByClinicIdAsync(string ClinicId)
         {
@@ -46,7 +47,7 @@ namespace Clinic_Management_System.Controllers
             return Ok(res);
         }
 
-        [HttpGet]
+        [HttpGet,Authorize]
         [Route("DoctorByDoctorIdAndClinicId")]
         public async Task<IActionResult> GetDoctrorsByDoctorIdAndClinicIdAsync(string UserId, string ClinicId)
         {
@@ -76,7 +77,7 @@ namespace Clinic_Management_System.Controllers
             return Ok(res);
         }
 
-        [HttpPost]
+        [HttpPost,Authorize]
         [Route("AddDoctor")]
         public async Task<IActionResult> AddDoctorAsync([FromBody] AddDoctorDTO Obj)
         {
@@ -106,7 +107,7 @@ namespace Clinic_Management_System.Controllers
             return Ok(res);
         }
 
-        [HttpPut]
+        [HttpPut,Authorize]
         [Route("UpdateDoctor")]
         public async Task<IActionResult> UpdateDoctorAsync([FromBody] UpdateDoctorDTO Obj)
         {

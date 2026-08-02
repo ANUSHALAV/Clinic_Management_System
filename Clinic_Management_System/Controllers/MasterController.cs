@@ -48,7 +48,7 @@ namespace Clinic_Management_System.Controllers.Masters
         }
 
 
-        [HttpGet]
+        [HttpGet,Authorize]
         [Route("Country")]
         public async Task<IActionResult> GetCountryAsync()
         {
@@ -79,7 +79,7 @@ namespace Clinic_Management_System.Controllers.Masters
             return Ok(res);
         }
 
-        [HttpGet]
+        [HttpGet,Authorize]
         [Route("State")]
         public async Task<IActionResult> GetStateByCountryIdAsync(string CountryId)
         {
@@ -110,7 +110,7 @@ namespace Clinic_Management_System.Controllers.Masters
             return Ok(res);
         }
 
-        [HttpGet]
+        [HttpGet,Authorize]
         [Route("District")]
         public async Task<IActionResult> GetDistrictByStateIdAsync(string StateId)
         {
@@ -141,7 +141,7 @@ namespace Clinic_Management_System.Controllers.Masters
             return Ok(res);
         }
 
-        [HttpGet]
+        [HttpGet,Authorize]
         [Route("Clinic")]
         public async Task<IActionResult> GetClinicAsync()
         {
@@ -172,7 +172,7 @@ namespace Clinic_Management_System.Controllers.Masters
             return Ok(res);
         }
 
-        [HttpPost]
+        [HttpPost,Authorize]
         [Route("AddClinic")]
         public async Task<IActionResult> AddClinicAsync([FromBody] AddClinicDTO ClinicDTOObj)
         {
@@ -194,7 +194,7 @@ namespace Clinic_Management_System.Controllers.Masters
             return Ok(res);
         }
 
-        [HttpPut]
+        [HttpPut,Authorize]
         [Route("UpdateClinic")]
         public async Task<IActionResult> UpdateClinicAsync([FromBody] UpdateClinicDTO UpdateClinicDTOObj)
         {
@@ -224,7 +224,7 @@ namespace Clinic_Management_System.Controllers.Masters
             return Ok(res);
         }
 
-        [HttpGet]
+        [HttpGet,Authorize]
         [Route("Depeartment")]
         public async Task<IActionResult> GetDepartmentAsync()
         {
@@ -256,7 +256,7 @@ namespace Clinic_Management_System.Controllers.Masters
             return Ok(res);
         }
 
-        [HttpPost]
+        [HttpPost,Authorize]
         [Route("AddDepratment")]
         public async Task<IActionResult> AddDepartmentAsync([FromBody] AddDepartmentDTO DepartmentDTOObj)
         {
@@ -285,7 +285,7 @@ namespace Clinic_Management_System.Controllers.Masters
             return Ok(res);
         }
 
-        [HttpPut]
+        [HttpPut,Authorize]
         [Route("UpdateDepratment")]
         public async Task<IActionResult> UpdateepartmentAsync([FromBody] UpdateDepartmentDTO DepartmentDTOObj)
         {

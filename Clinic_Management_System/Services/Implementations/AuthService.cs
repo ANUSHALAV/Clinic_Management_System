@@ -79,7 +79,7 @@ namespace Clinic_Management_System.Services.Implementations
             var claims = new[]
             {
             new Claim(ClaimTypes.NameIdentifier, user.UserId),
-            new Claim(ClaimTypes.Name, user.FirstName),
+            new Claim(ClaimTypes.Name, user.FirstName+ " " + user.LastName),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Role, user.UserTypeId)
         };
@@ -102,3 +102,4 @@ namespace Clinic_Management_System.Services.Implementations
         }
     }
 }
+

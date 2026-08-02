@@ -1,6 +1,7 @@
 ﻿using Clinic_Management_System.Models.DTOs;
 using Clinic_Management_System.Models.Responses;
 using Clinic_Management_System.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic_Management_System.Controllers
@@ -15,7 +16,7 @@ namespace Clinic_Management_System.Controllers
             _patientService = patientService;
         }
 
-        [HttpGet]
+        [HttpGet,Authorize]
         [Route("Patients")]
         public async Task<IActionResult> GetPatientAsync([FromBody] ImportDTO obj)
         {
@@ -44,7 +45,7 @@ namespace Clinic_Management_System.Controllers
             return Ok(res);
         }
 
-        [HttpGet]
+        [HttpGet,Authorize]
         [Route("PatientByClinicIdAndPatientId")]
         public async Task<IActionResult> GetPatientByClinicIdAndPatientIdAsync(string ClinicId, string PatientId)
         {
@@ -73,7 +74,7 @@ namespace Clinic_Management_System.Controllers
             return Ok(res);
         }
 
-        [HttpPost]
+        [HttpPost,Authorize]
         [Route("AddPatient")]
         public async Task<IActionResult> AddPatientAsync([FromBody] AddPatientDTO Obj)
         {
@@ -102,7 +103,7 @@ namespace Clinic_Management_System.Controllers
             return Ok(res);
         }
 
-        [HttpPut]
+        [HttpPut,Authorize]
         [Route("UpdatePatientById")]
         public async Task<IActionResult> UpdatePatientDetailsByPatientId([FromBody] UpdatePatientDTO Obj)
         {

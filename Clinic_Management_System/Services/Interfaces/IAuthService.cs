@@ -8,6 +8,6 @@ namespace Clinic_Management_System.Services.Interfaces
     {
         public Task<UserResponse> LoginAsync(LoginDTO Obj);
 
-        string GenerateToken(User user);
+        public string GenerateToken(User user);
     }
 }

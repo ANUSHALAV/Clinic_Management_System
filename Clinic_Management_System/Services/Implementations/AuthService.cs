@@ -45,19 +45,6 @@ namespace Clinic_Management_System.Services.Implementations
                     if (isPasswordValid == PasswordVerificationResult.Success)
                     {
                         var token = GenerateToken(userData);
-                        //response = new UserResponse
-                        //{
-                        //    UserId = userData.UserId,
-                        //    UserTypeId = userData.UserTypeId,
-                        //    ClinicId = userData.ClinicId,
-                        //    FirstName = userData.FirstName,
-                        //    LastName = userData.LastName,
-                        //    DateOfBirth = userData.DateOfBirth,
-                        //    Email = userData.Email,
-                        //    Address = userData.Address,
-                        //    Gender = userData.Gender,
-                        //    PhoneNumber = userData.PhoneNumber,
-                        //};
                         response = new UserResponse
                         {
                             UserId = userData.UserId,
